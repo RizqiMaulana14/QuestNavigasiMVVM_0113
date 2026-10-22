@@ -1,2 +1,53 @@
-package com.example.pertemuan6
+package com.example.firstapp
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+//import com.example.firstapp.view.FormIsian
+//import com.example.firstapp.view.TampilData
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.NavHost
+import com.example.pertemuan6.view.FormLogin
+import com.example.pertemuan6.view.TampilData
+
+enum class Navigasi{
+    FormulirSaya,
+    Detail
+}
+
+@Composable
+fun DataApp(
+    navController: NavHostController = rememberNavController()
+){
+    Scaffold() {
+            isiRuang ->
+        NavHost(
+            navController = navController,
+            startDestination = Navigasi.FormulirSaya.name,
+
+            modifier = Modifier.padding(isiRuang)){
+            composable(route = Navigasi.FormulirSaya.name){
+                FormLogin (
+                    OnSubmitBtnClick = {
+                        navController.navigate(Navigasi.Detail.name)
+                    }
+                )
+            }
+            composable(route = Navigasi.Detail.name){
+                TampilData (
+                    onBackBtnClick = {cancelAndBackToFormulirSaya(navController)
+                    }
+                )
+            }
+        }
+    }
+}
+
+fun cancelAndBackToFormulirSaya(
+    navController: NavHostController
+){
+    navController.popBackStack(Navigasi.FormulirSaya.name, inclusive = false)
+}
